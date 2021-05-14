@@ -10,6 +10,18 @@ module.exports = {
     host: DB_HOST,
     port: DB_PORT,
     dialect: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        // Ref.: https://github.com/brianc/node-postgres/issues/2009
+        rejectUnauthorized: false,
+      },
+      keepAlive: true,        
+    },      
+    ssl: true,
+    define: {
+      timestamps: false,
+    },
   },
   test: {
     username: DB_USER,
@@ -18,6 +30,18 @@ module.exports = {
     host: DB_HOST,
     port: DB_PORT,
     dialect: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        // Ref.: https://github.com/brianc/node-postgres/issues/2009
+        rejectUnauthorized: false,
+      },
+      keepAlive: true,        
+    },      
+    ssl: true,
+    define: {
+      timestamps: false,
+    },
   },
   production: {
     username: DB_USER,
@@ -26,5 +50,17 @@ module.exports = {
     host: DB_HOST,
     port: DB_PORT,
     dialect: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        // Ref.: https://github.com/brianc/node-postgres/issues/2009
+        rejectUnauthorized: false,
+      },
+      keepAlive: true,        
+    },      
+    ssl: true,
+    define: {
+      timestamps: false,
+    },
   },
 };
