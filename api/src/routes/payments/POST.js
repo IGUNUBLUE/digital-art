@@ -1,78 +1,79 @@
 require("dotenv").config();
 const server = require("express").Router();
-const mercadopago = require("mercadopago");
+// const mercadopago = require("mercadopago");
 const { Orders, Products, Categories } = require("../../db");
-const { ACCESS_TOKEN_MP, STRIPE, FRONT_URL  } = process.env;
+// const { ACCESS_TOKEN_MP, STRIPE, FRONT_URL  } = process.env;
+const { STRIPE, FRONT_URL  } = process.env;
 const stripe = require("stripe")(STRIPE);
 
 
-mercadopago.configure({
-  access_token: ACCESS_TOKEN_MP,
-});
+// mercadopago.configure({
+//   access_token: ACCESS_TOKEN_MP,
+// });
 
-server.post("/mercado-pago/create-preference/:orderId", async (req, res) => {
-  try {
-    const orderId = req.params.orderId;
-    if (orderId) {
-      const order = await Orders.findOne({
-        where: {
-          id: orderId,
-        },
-        include: [
-          {
-            model: Products,
-            include: [
-              {
-                model: Categories,
-                through: { attributes: [] },
-              },
-            ],
-            through: { attributes: [] },
-          },
-        ],
-      });
+// server.post("/mercado-pago/create-preference/:orderId", async (req, res) => {
+//   try {
+//     const orderId = req.params.orderId;
+//     if (orderId) {
+//       const order = await Orders.findOne({
+//         where: {
+//           id: orderId,
+//         },
+//         include: [
+//           {
+//             model: Products,
+//             include: [
+//               {
+//                 model: Categories,
+//                 through: { attributes: [] },
+//               },
+//             ],
+//             through: { attributes: [] },
+//           },
+//         ],
+//       });
 
-      const createdPref = await mercadopago.preferences.create({
-        items: order.products.map((product) => ({
-          id: product.id,
-          category_id: product.categories[0].id.toString(),
-          description: product.description,
-          title: product.name,
-          unit_price: Number(Number(product.price).toFixed()),
-          quantity: 1,
-        })),
-        external_reference: `${orderId}`,
-        payment_methods: {
-          excluded_payment_types: [
-            {
-              id: "atm",
-            },
-          ],
-          installments: 1,
-        },
-        back_urls: {
-          success: `${FRONT_URL}/checkout`,
-          failure: `${FRONT_URL}/checkout`,
-          pending: `${FRONT_URL}/checkout`,
-        },
-      });
+//       const createdPref = await mercadopago.preferences.create({
+//         items: order.products.map((product) => ({
+//           id: product.id,
+//           category_id: product.categories[0].id.toString(),
+//           description: product.description,
+//           title: product.name,
+//           unit_price: Number(Number(product.price).toFixed()),
+//           quantity: 1,
+//         })),
+//         external_reference: `${orderId}`,
+//         payment_methods: {
+//           excluded_payment_types: [
+//             {
+//               id: "atm",
+//             },
+//           ],
+//           installments: 1,
+//         },
+//         back_urls: {
+//           success: `${FRONT_URL}/checkout`,
+//           failure: `${FRONT_URL}/checkout`,
+//           pending: `${FRONT_URL}/checkout`,
+//         },
+//       });
 
-      res.status(201).json({
-        method: "mercado-pago",
-        id: createdPref.body.id,
-        url: createdPref.body.init_point,
-      });
-    } else if (req.body) {
-      let body = req.body;
-      console.log(body);
-    } else {
-      res.status(401).json({ message: "Incomplete data" });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
+//       res.status(201).json({
+//         method: "mercado-pago",
+//         id: createdPref.body.id,
+//         url: createdPref.body.init_point,
+//       });
+//     } else if (req.body) {
+//       let body = req.body;
+//       console.log(body);
+//     } else {
+//       res.status(401).json({ message: "Incomplete data" });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// });
 
 server.post("/stripe/create-session", async (req, res) => {
   try {
