@@ -44,7 +44,7 @@ server.post("/", async (req, res) => {
   } 
   catch (error) {
     console.log(error)
-    res.status(500).json(error)
+    res.status(500).json({ message: error, status: 500 })
     // res.status(500).json({ message: "Internal server error", status: 500 })
   }
 })
