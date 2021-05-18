@@ -16,6 +16,18 @@ server.post("/", async (req, res) => {
     authorId,
     seriesId,
   } = req.body;
+ 
+  console.log(name,
+    description,
+    price,
+    available,
+    fileLink,
+    preview,
+    stock,
+    initialStock,
+    categories,
+    authorId,
+    seriesId)
 
   try {
     var products = await Products.findOrCreate({
@@ -33,6 +45,8 @@ server.post("/", async (req, res) => {
         seriesId: seriesId,
       },
     })
+
+    console.log(products)
 
     if (!categories) {
       return res.status(200).json(products[0]);
