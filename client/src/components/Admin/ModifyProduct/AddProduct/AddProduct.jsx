@@ -168,6 +168,7 @@ function AddProduct() {
                             'success'
                         )
                         // location.reload();
+											event.target.reset()
                     
                     }
                 })
