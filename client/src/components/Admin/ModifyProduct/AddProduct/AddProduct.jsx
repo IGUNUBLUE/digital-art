@@ -167,7 +167,7 @@ function AddProduct() {
                             'this product is SAlved',
                             'success'
                         )
-                        location.reload();
+                        // location.reload();
                     
                     }
                 })
